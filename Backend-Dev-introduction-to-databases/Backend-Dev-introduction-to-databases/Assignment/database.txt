@@ -1,0 +1,132 @@
+1. Explain the key differences between SQL and NoSQL databases with examples.
+
+SQL and NoSQL databases differ mainly in structure and flexibility.
+SQL databases, such as MySQL, are relational and store data in tables with rows and columns. They follow a fixed schema, meaning the structure must be defined before inserting data. SQL supports complex queries and joins between tables.
+
+NoSQL databases, such as MongoDB, are non-relational and store data in flexible formats like documents. They do not require a fixed schema, allowing data structure to change easily. They are designed for scalability and high performance.
+
+In summary, SQL is structured and strict, while NoSQL is flexible and scalable.
+
+2. What does the CAP theorem state, and why can’t a distributed system guarantee all three properties?
+
+The CAP theorem states that a distributed system can provide only two out of three properties: Consistency, Availability, and Partition Tolerance.
+
+Consistency means all nodes have the same data at the same time.
+Availability means every request receives a response.
+Partition Tolerance means the system continues to work even when there is a network failure.
+
+In real-world systems, network failures are unavoidable. Because of this, systems must choose between consistency and availability when a partition occurs. Therefore, it is not possible to guarantee all three properties simultaneously.
+
+3. Describe three scenarios where MongoDB would be preferred over a relational database.
+
+MongoDB is preferred in the following situations:
+
+When the data structure is not fixed and may change frequently, such as in user profiles or social media applications.
+When the application needs to handle large amounts of data and requires horizontal scaling.
+When fast read and write operations are needed, such as in real-time applications like chat systems or analytics dashboards.
+
+4. Why does MongoDB use BSON internally instead of storing documents as JSON?
+
+MongoDB uses BSON (Binary JSON) instead of JSON because it is more efficient. BSON is faster to process and supports additional data types such as Date and ObjectId, which are not available in standard JSON.
+
+It also improves storage efficiency and allows faster traversal of data. This makes BSON more suitable for database operations compared to plain JSON.
+
+5. Write MongoDB queries to find all students with GPA above 3.5 and enrolled in “CS101”.
+
+db.students.find({
+  gpa: { $gt: 3.5 },
+  course: "CS101"
+})
+
+This query retrieves all documents where the GPA is greater than 3.5 and the course is CS101.
+
+  --------------------------------------------------------------------------------
+
+  Mongo crud operations
+
+
+1. What are the advantages of using Mongoose over the native MongoDB driver?
+
+Mongoose is an Object Data Modeling (ODM) library for MongoDB that makes working with databases easier in Node.js.
+
+The main advantages are:
+
+It provides a structured schema, which helps in maintaining consistency in data.
+It supports validation, so you can enforce rules like required fields or data types.
+It offers middleware (hooks) for running logic before or after database operations.
+It simplifies queries using built-in methods and better abstraction.
+It helps manage relationships between data more easily.
+
+In contrast, the native MongoDB driver is more flexible but requires more manual work and lacks built-in structure.
+
+2. Explain the difference between findOneAndUpdate() and updateOne().
+
+Both methods are used to update documents, but they behave differently.
+
+updateOne() updates a document that matches the condition but does not return the updated document. It only returns the status of the operation.
+findOneAndUpdate() updates the document and can return either the original or the updated document, depending on options provided.
+
+Example:
+
+Model.updateOne({ name: "Aadi" }, { $set: { age: 25 } })
+Model.findOneAndUpdate(
+  { name: "Aadi" },
+  { $set: { age: 25 } },
+  { new: true }
+)
+
+Here, new: true ensures the updated document is returned.
+
+3. What is the purpose of middleware in Mongoose?
+
+Middleware in Mongoose is used to execute functions before or after certain operations like saving, updating, or deleting documents.
+
+It is useful for:
+
+Validating or modifying data before saving
+Logging actions
+Hashing passwords before storing them
+Performing cleanup tasks after deletion
+
+Example:
+
+userSchema.pre("save", function(next) {
+  console.log("Before saving user");
+  next();
+});
+
+This runs before a document is saved.
+
+4. How do you implement pagination in Mongoose?
+
+Pagination is used to limit the number of results returned and divide data into pages.
+
+It is implemented using skip() and limit().
+
+Example:
+
+const page = 2;
+const limit = 5;
+
+Model.find()
+  .skip((page - 1) * limit)
+  .limit(limit);
+
+This skips documents from previous pages and returns only the required number of records.
+
+Pagination improves performance and user experience when dealing with large datasets.
+
+5. When should you use embedding vs referencing in MongoDB schema design?
+
+Embedding and referencing are two ways to design relationships in MongoDB.
+
+Embedding means storing related data within the same document.
+Use it when data is closely related and frequently accessed together.
+It improves read performance because everything is in one place.
+Example: storing comments inside a blog post document.
+Referencing means storing related data in separate documents and linking them using IDs.
+Use it when data is large, complex, or shared across multiple documents.
+It avoids duplication and keeps data normalized.
+Example: users and orders stored separately.
+
+In short, use embedding for simplicity and speed, and referencing for flexibility and scalability.
